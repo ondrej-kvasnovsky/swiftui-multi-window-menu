@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct multi_window_menuApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
+    }.commands {
+      MenuCommands()
     }
+  }
 }
