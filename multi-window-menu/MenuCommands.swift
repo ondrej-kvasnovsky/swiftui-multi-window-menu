@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 
 struct MenuCommands: Commands {
+  var globalViewModel: GlobalViewModel
   
   var body: some Commands {
     CommandGroup(after: CommandGroupPlacement.newItem, addition: {
@@ -29,9 +30,8 @@ struct MenuCommands: Commands {
             let path: String = result!.path
             do {
               let string = try String(contentsOf: URL(fileURLWithPath: path), encoding: .utf8)
-              print(string)
-              // how to get access to the currently active view model to update the inputText variable?
-              // viewModel.inputText = string
+              print("Active Window", self.globalViewModel.activeWindow?.windowNumber)
+              self.globalViewModel.activeViewModel?.inputText = string
             }
             catch {
               print("Error \(error)")
@@ -43,7 +43,7 @@ struct MenuCommands: Commands {
       }, label: {
         Text("Open File")
       })
-      .keyboardShortcut("O", modifiers: .command)
+      .keyboardShortcut("O", modifiers: [.command])
     })
   }
 }

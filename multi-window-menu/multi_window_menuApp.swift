@@ -9,12 +9,22 @@ import SwiftUI
 
 @main
 struct multi_window_menuApp: App {
-
+  
+  @State var globalViewModel = GlobalViewModel()
+  
   var body: some Scene {
     WindowGroup {
       ContentView()
-    }.commands {
-      MenuCommands()
+        .environmentObject(self.globalViewModel)
+    }
+    .commands {
+      MenuCommands(globalViewModel: self.globalViewModel)
+    }
+    
+    Settings {
+      VStack {
+        Text("My Settingsview")
+      }
     }
   }
 }
