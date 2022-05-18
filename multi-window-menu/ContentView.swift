@@ -21,6 +21,27 @@ class GlobalViewModel : NSObject, ObservableObject {
   // currently active view model for the active window
   @Published var activeViewModel: ViewModel?
   
+  override init() {
+    super.init()
+    // deallocate a window when it is closed
+    // thanks for this Maciej Kupczak 🙏 
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(onWillCloseWindowNotification(_:)),
+      name: NSWindow.willCloseNotification,
+      object: nil
+    )
+  }
+  
+  @objc func onWillCloseWindowNotification(_ notification: NSNotification) {
+    guard let window = notification.object as? NSWindow else {
+      return
+    }
+    var viewModels = self.viewModels
+    viewModels.removeValue(forKey: window.windowNumber)
+    self.viewModels = viewModels
+  }
+  
   func addWindow(window: NSWindow) {
     window.delegate = self
     windows.insert(window)
